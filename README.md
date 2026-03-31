@@ -272,69 +272,23 @@ manual:
 ## 8. Setup Instructions
 
 ### Clone Repository
-```bash
-git clone https://github.com/YOUR-USERNAME/Bootcamp_Assignment_Diagnostic_Multimodal_Rag.git
-cd Bootcamp_Assignment_Diagnostic_Multimodal_Rag
+git clone <your-public-repo-url>
+cd Multimodal-RAG-System-with-FastAPI
 ```
 
 ### Create Environment
-```bash
-# Upgrade pip first
 pip install --upgrade pip
-
-# Install all dependencies (takes 5-10 minutes on first run)
-# This downloads PyTorch (~750MB) and sentence-transformers (~400MB)
 pip install -r requirements.txt
 
-# Pre-download the embedding model to avoid delay on first query
-python3 -c "
-from sentence_transformers import SentenceTransformer
-m = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
-print('Model ready, dim:', m.get_sentence_embedding_dimension())
-"
-```
-
 ### Configure Environment Variables
-```bash
-
 .env.example .env
-
 nano .env
-```
 
  `.env`: ANTHROPIC_API_KEY=sk-ant-api03-YOUR-REAL-KEY-HERE
 ```
 
-All other values work correctly with their defaults.
-
 ### Run FastAPI Server
-```bash
-# Terminal 1 — start the server (stays running)
-python3 main.py
-```bash
-
-curl -X POST http://localhost:8000/ingest \
-  -F "file=@sample_documents/Diagnostic_Document.pdf" \
-  -F "collection=diagnostic_rag" \
-  -F "use_vision=true"
-
-# Query — text retrieval
-curl -X POST http://localhost:8000/query \
-  -H "Content-Type: application/json" \
-  -d '{"question": "What does fault code P0087 mean?"}'
-
-# Query — table retrieval only
-curl -X POST http://localhost:8000/query \
-  -H "Content-Type: application/json" \
-  -d '{"question": "List STOP_ENGINE group faults",
-       "chunk_type_filter": "table"}'
-
-# Query — image retrieval only (VLM wiring descriptions)
-curl -X POST http://localhost:8000/query \
-  -H "Content-Type: application/json" \
-  -d '{"question": "ECU pin connections for rail pressure sensor",
-       "chunk_type_filter": "image"}'
-```
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
 ### Open API Docs
 ```
