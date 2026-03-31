@@ -18,12 +18,6 @@ diagnostic manuals — a category of highly structured technical documents
 that combine narrative text, tabular fault code data, and embedded
 wiring schematic images within a single PDF.
 
-**Target Users:**
-- Service engineers and automotive technicians at dealerships and
-  independent workshops
-- Diagnostic software developers building fault-resolution tooling
-- Training systems for junior technicians learning ECU diagnostics
-
 ---
 
 ## 2. Problem Description
@@ -135,12 +129,6 @@ RAG (Retrieval-Augmented Generation) solves both problems:
 - The retrieved chunks contain exactly the right information from text,
   tables, and images for that specific fault code query
 - Claude generates a grounded, structured answer from real document content
-
-**The Grounding Requirement:**
-The SYSTEM_PROMPT in this implementation explicitly instructs Claude:
-*"Base your answer EXCLUSIVELY on the provided context. If the answer is
-not in the context, state that clearly."* This prevents hallucination —
-Claude cannot invent fault procedures that do not exist in the document.
 
 ---
 
@@ -311,17 +299,13 @@ print('Model ready, dim:', m.get_sentence_embedding_dimension())
 
 ### Configure Environment Variables
 ```bash
-# Copy the template
-cp .env.example .env
 
-# Open .env and add your Anthropic API key
-# Get your key from: https://console.anthropic.com -> API Keys
+.env.example .env
+
 nano .env
 ```
 
-Edit the first line in `.env`:
-```
-ANTHROPIC_API_KEY=sk-ant-api03-YOUR-REAL-KEY-HERE
+ `.env`: ANTHROPIC_API_KEY=sk-ant-api03-YOUR-REAL-KEY-HERE
 ```
 
 All other values work correctly with their defaults.
@@ -330,21 +314,8 @@ All other values work correctly with their defaults.
 ```bash
 # Terminal 1 — start the server (stays running)
 python3 main.py
-```
-
-Expected output:
-```
-============================================================
-  Bootcamp Assignment — Diagnostic Multimodal RAG
-============================================================
-  OK  Embedding model ready (dim=384)
-  OK  ChromaDB ready (0 chunks in 'diagnostic_rag')
-  OK  API ready — open /docs for Swagger UI
-============================================================
-INFO  Uvicorn running on http://0.0.0.0:8000
-```
 ```bash
-# Terminal 2 — ingest the sample PDF (takes ~90-150 seconds)
+
 curl -X POST http://localhost:8000/ingest \
   -F "file=@sample_documents/Diagnostic_Document.pdf" \
   -F "collection=diagnostic_rag" \
@@ -369,17 +340,9 @@ curl -X POST http://localhost:8000/query \
 ```
 
 ### Open API Docs
-
-After the server starts, open in your browser:
 ```
 http://localhost:8000/docs
-```
-
-In GitHub Codespaces, use the forwarded URL from the **PORTS** tab.
-Click the globe icon next to port 8000, then append `/docs` to the URL.
-
 ---
-
 ## 9. API Documentation
 
 ### GET /health
@@ -501,9 +464,6 @@ FastAPI auto-generated interactive Swagger UI. Accessible at:
 ```
 http://localhost:8000/docs
 ```
-Allows you to explore and test all endpoints directly from the browser
-with a "Try it out" button for every endpoint.
-
 ---
 
 ## 10. Screenshots
