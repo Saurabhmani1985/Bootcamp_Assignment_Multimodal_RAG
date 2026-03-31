@@ -1,7 +1,4 @@
 # Bootcamp Assignment -- Diagnostic Multimodal RAG
-
-# Bootcamp Assignment — Diagnostic Multimodal RAG
-
 ---
 
 ## 1. Domain Identification
